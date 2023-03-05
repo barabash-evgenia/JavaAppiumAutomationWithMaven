@@ -56,12 +56,17 @@ abstract public class MyListsPageObject extends MainPageObject{
                     "Cannot find saved article"
             );
         } else {
+            String removeButton = String.format(REMOVE_FROM_SAVED_BUTTON, articleTitle);
             this.waitForElementAndClick(
-                    articleTitleXpath,
+                    removeButton,
                     "Cannot click button to remove article from saved",
                     10);
+            this.waitForElementNotPresent(
+                    removeButton,
+                    "Remove button is still presented",
+                    10
+                    );
         }
-
         if (Platform.getInstance().isIOS()){
             this.clickElementToTheRightUpperCorner(articleTitleXpath, "Cannot find saved article");
             this.clickSwipeActionDeleteButton();

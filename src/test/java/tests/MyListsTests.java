@@ -14,11 +14,11 @@ public class MyListsTests extends CoreTestCase {
     private static final String nameOfFolder = "Learning programming";
     private static final String login = "learnqa_barabash",
                                 password = "Qwerty1324";
+    private static String currentUrl = "https://ru.wikipedia.org/";
 
 
     @Test
     public void testSaveFirstArticleToMyList() {
-        String currentUrl = "https://ru.wikipedia.org/";
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
@@ -68,26 +68,46 @@ public class MyListsTests extends CoreTestCase {
     public void testSaveTwoArticlesToMyListAndDeleteOneFromMyList() {
         String searchLine = "Java";
         String nameOfFolder = "Learning programming";
-        String firstArticleTitle = "High-level programming language";
-        String secondArticleTitle = "Object-oriented programming language";
+        String firstArticleDescription = "High-level programming language";
+        String secondArticleDescription = "Object-oriented programming language";
+        String firstArticleTitle = "JavaScript";
+        String secondArticleTitle = "Java (programming language)";
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         NavigationUIPageObject navigationUI = NavigationUIPageObjectFactory.get(driver);;
         MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(searchLine);
-        searchPageObject.clickByArticleWithSubstring(firstArticleTitle);
+        searchPageObject.clickByArticleWithSubstring(firstArticleDescription);
+        articlePageObject.waitForTitleElement();
+        if (Platform.getInstance().isMW()) {
+            currentUrl = driver.getCurrentUrl();
+        }
         if (Platform.getInstance().isAndroid()){
             articlePageObject.addArticleToNewList(nameOfFolder);
         } else {
             articlePageObject.addArticlesToMySaved();
         }
+        if (Platform.getInstance().isMW()) {
+            AuthorizationPageObject authorizationPageObject = new AuthorizationPageObject(driver);
+            authorizationPageObject.clickAuthButton();
+            authorizationPageObject.enterLoginData(login, password);
+            authorizationPageObject.submitForm();
+            driver.get(currentUrl);
+            articlePageObject.waitForTitleElement();
+            assertEquals(
+                    "We are not on the same page after login",
+                    firstArticleTitle,
+                    articlePageObject.getArticleTitle());
+            articlePageObject.addArticlesToMySaved();
+        }
         articlePageObject.closeArticle();
-        if (Platform.getInstance().isAndroid()){
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isMW()){
             searchPageObject.initSearchInput();
             searchPageObject.typeSearchLine(searchLine);
         }
-        searchPageObject.clickByArticleWithSubstring(secondArticleTitle);
+        searchPageObject.clickByArticleWithSubstring(secondArticleDescription);
+        articlePageObject.waitForTitleElement();
         if (Platform.getInstance().isAndroid()){
             articlePageObject.addArticleToExistingList(nameOfFolder);
         } else {
@@ -97,18 +117,25 @@ public class MyListsTests extends CoreTestCase {
         if (Platform.getInstance().isIOS()){
             searchPageObject.clickCancelButton();
         }
+        navigationUI.openNavigation();
         navigationUI.clickMyLists();
         if (Platform.getInstance().isAndroid()){
             myListsPageObject.openFolderByName(nameOfFolder);
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             myListsPageObject.closeSyncYourSavedArticlesWindow();
         }
         if (Platform.getInstance().isAndroid()){
-            myListsPageObject.waitForArticleToAppearByTitle(firstArticleTitle.toLowerCase());
-            myListsPageObject.waitForArticleToAppearByTitle(secondArticleTitle.toLowerCase());
-            myListsPageObject.swipeByArticleToDelete(firstArticleTitle.toLowerCase());
-            myListsPageObject.waitForArticleToDisappearByTitle(firstArticleTitle.toLowerCase());
-            myListsPageObject.waitForArticleToAppearByTitle(secondArticleTitle.toLowerCase());
+            myListsPageObject.waitForArticleToAppearByTitle(firstArticleDescription.toLowerCase());
+            myListsPageObject.waitForArticleToAppearByTitle(secondArticleDescription.toLowerCase());
+            myListsPageObject.swipeByArticleToDelete(firstArticleDescription.toLowerCase());
+            myListsPageObject.waitForArticleToDisappearByTitle(firstArticleDescription.toLowerCase());
+            myListsPageObject.waitForArticleToAppearByTitle(secondArticleDescription.toLowerCase());
+        } else if (Platform.getInstance().isIOS()){
+            myListsPageObject.waitForArticleToAppearByTitle(firstArticleDescription);
+            myListsPageObject.waitForArticleToAppearByTitle(secondArticleDescription);
+            myListsPageObject.swipeByArticleToDelete(firstArticleDescription);
+            myListsPageObject.waitForArticleToDisappearByTitle(firstArticleDescription);
+            myListsPageObject.waitForArticleToAppearByTitle(secondArticleDescription);
         } else {
             myListsPageObject.waitForArticleToAppearByTitle(firstArticleTitle);
             myListsPageObject.waitForArticleToAppearByTitle(secondArticleTitle);
