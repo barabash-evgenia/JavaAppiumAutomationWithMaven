@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AuthorizationPageObject extends MainPageObject {
@@ -14,6 +15,7 @@ public class AuthorizationPageObject extends MainPageObject {
         super(driver);
     }
 
+    @Step("Clicking authorization button. Method is for Mobile Web only")
     public void clickAuthButton() {
         this.waitForElementPresent(
                 LOGIN_BUTTON,
@@ -25,6 +27,7 @@ public class AuthorizationPageObject extends MainPageObject {
                 5);
     }
 
+    @Step("Entering user login and password. Method is for Mobile Web only")
     public void enterLoginData(String login, String password) {
         this.waitForElementAndSendKeys(
                 LOGIN_INPUT,
@@ -38,6 +41,7 @@ public class AuthorizationPageObject extends MainPageObject {
                 5);
     }
 
+    @Step("Clicking submit button. Method is for Mobile Web only")
     public void submitForm() {
         waitForElementAndClick(
                 SUBMIT_BUTTON,

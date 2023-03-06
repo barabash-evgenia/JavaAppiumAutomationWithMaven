@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class WelcomePageObject extends MainPageObject{
@@ -12,6 +13,7 @@ public class WelcomePageObject extends MainPageObject{
                                 ELEMENT_TYPE_BUTTON = "xpath://XCUIElementTypeButton[@name='%s']",
                                 SKIP = "xpath://XCUIElementTypeButton[@name='Skip']";
 
+    @Step("Waiting for 'Learn more about Wikipedia' link. Method is for iOS only")
     public void waitForLearnMoreLink() {
         this.waitForElementPresent(
                 String.format(ELEMENT_TYPE_STATIC_TEXT, "Learn more about Wikipedia"),
@@ -20,6 +22,7 @@ public class WelcomePageObject extends MainPageObject{
         );
     }
 
+    @Step("Waiting for 'New ways to explore' label. Method is for iOS only")
     public void waitForNewWayToExploreText() {
         this.waitForElementPresent(
                 String.format(ELEMENT_TYPE_STATIC_TEXT, "New ways to explore"),
@@ -28,6 +31,7 @@ public class WelcomePageObject extends MainPageObject{
         );
     }
 
+    @Step("Waiting for 'Add or edit preferred languages' link. Method is for iOS only")
     public void waitForAddOrEditPreferredLanguagesLink() {
         this.waitForElementPresent(
                 String.format(ELEMENT_TYPE_STATIC_TEXT, "Add or edit preferred languages"),
@@ -36,6 +40,7 @@ public class WelcomePageObject extends MainPageObject{
         );
     }
 
+    @Step("Waiting for 'Learn more about data collected' link. Method is for iOS only")
     public void waitForLearnMoreAboutDataCollectedLink() {
         this.waitForElementPresent(
                 String.format(ELEMENT_TYPE_STATIC_TEXT, "Learn more about data collected"),
@@ -44,6 +49,7 @@ public class WelcomePageObject extends MainPageObject{
         );
     }
 
+    @Step("Clicking next button. Method is for iOS only")
     public void clickNextButton() {
         this.waitForElementAndClick(
                 String.format(ELEMENT_TYPE_BUTTON, "Next"),
@@ -52,6 +58,7 @@ public class WelcomePageObject extends MainPageObject{
         );
     }
 
+    @Step("Clicking get started button. Method is for iOS only")
     public void clickGetStartedButton() {
         this.waitForElementAndClick(
                 String.format(ELEMENT_TYPE_BUTTON, "Get started"),
@@ -60,6 +67,7 @@ public class WelcomePageObject extends MainPageObject{
         );
     }
 
+    @Step("Clicking skip button. Method is for iOS only")
     public void clickSkip() {
         this.waitForElementAndClick(
                 SKIP,

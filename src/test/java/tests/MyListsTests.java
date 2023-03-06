@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
@@ -7,8 +9,10 @@ import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIPageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
+@Epic("Tests for articles")
 public class MyListsTests extends CoreTestCase {
 
     private static final String nameOfFolder = "Learning programming";
@@ -18,6 +22,11 @@ public class MyListsTests extends CoreTestCase {
 
 
     @Test
+    @Features(value = {@Feature(value="Search"),@Feature(value="Article")})
+    @DisplayName("Save and delete article")
+    @Description("We open 'Java Object-oriented programming language' article, save it to my list and then swipe it to delete from my list")
+    @Step("Starting test testSaveFirstArticleToMyList")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testSaveFirstArticleToMyList() {
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
@@ -41,7 +50,7 @@ public class MyListsTests extends CoreTestCase {
             authorizationPageObject.submitForm();
             driver.get(currentUrl);
             articlePageObject.waitForTitleElement();
-            assertEquals(
+            Assert.assertEquals(
                     "We are not on the same page after login",
                     articleTitle,
                     articlePageObject.getArticleTitle());
@@ -65,6 +74,11 @@ public class MyListsTests extends CoreTestCase {
     }
 
     @Test
+    @Features(value = {@Feature(value="Search"),@Feature(value="Article")})
+    @DisplayName("Save two articles to my list and then delete on of them")
+    @Description("We open two articles 'Java Object-oriented programming language' and 'JavaScript High-level programming language', save them to my list and then swipe 'JavaScript High-level programming language' to delete it from my list")
+    @Step("Starting test testSaveTwoArticlesToMyListAndDeleteOneFromMyList")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testSaveTwoArticlesToMyListAndDeleteOneFromMyList() {
         String searchLine = "Java";
         String nameOfFolder = "Learning programming";
@@ -95,7 +109,7 @@ public class MyListsTests extends CoreTestCase {
             authorizationPageObject.submitForm();
             driver.get(currentUrl);
             articlePageObject.waitForTitleElement();
-            assertEquals(
+            Assert.assertEquals(
                     "We are not on the same page after login",
                     firstArticleTitle,
                     articlePageObject.getArticleTitle());
