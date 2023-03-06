@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -16,6 +17,7 @@ abstract public class MyListsPageObject extends MainPageObject{
         super(driver);
     }
 
+    @Step("Opening my folder by name. Method is for Android only")
     public void openFolderByName(String nameOfFolder) {
         String folderNameXpath = String.format(FOLDER_BY_NAME_TPL, nameOfFolder);
         this.waitForElementPresent(
@@ -30,6 +32,7 @@ abstract public class MyListsPageObject extends MainPageObject{
         );
     }
 
+    @Step("Waiting for article to appear by its title")
     public void waitForArticleToAppearByTitle(String articleTitle) {
         String articleTitleXpath = String.format(ARTICLE_BY_TITLE_TPL, articleTitle);
         this.waitForElementPresent(
@@ -39,6 +42,7 @@ abstract public class MyListsPageObject extends MainPageObject{
         );
     }
 
+    @Step("Waiting for article to disappear by its title")
     public void waitForArticleToDisappearByTitle(String articleTitle) {
         String articleTitleXpath = String.format(ARTICLE_BY_TITLE_TPL, articleTitle);
         this.waitForElementNotPresent(
@@ -47,6 +51,8 @@ abstract public class MyListsPageObject extends MainPageObject{
                 15
         );
     }
+
+    @Step("Swiping article to delete it")
     public void swipeByArticleToDelete(String articleTitle) {
         this.waitForArticleToAppearByTitle(articleTitle);
         String articleTitleXpath = String.format(ARTICLE_BY_TITLE_TPL, articleTitle);
@@ -77,12 +83,14 @@ abstract public class MyListsPageObject extends MainPageObject{
         this.waitForArticleToDisappearByTitle(articleTitle);
     }
 
+    @Step("Closing 'Sync your saved articles?'. Method is for iOS only")
     public void closeSyncYourSavedArticlesWindow() {
         this.waitForElementAndClick(CLOSE_SYNC_YOUR_SAVED_ARTICLES_WINDOW,
                 "Cannot find 'X' button to close 'Sync your saved articles?' window",
                 5);
     }
 
+    @Step("Clicking 'swipe action delete' button. Method is for iOS only")
     public void clickSwipeActionDeleteButton() {
         this.waitForElementAndClick(SWIPE_ACTION_DELETE_BUTTON,
                 "Cannot find 'swipe action delete' button",
